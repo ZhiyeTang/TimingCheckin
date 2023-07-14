@@ -13,4 +13,4 @@ time.sleep(60)
 # 手动登录并扫码
 
 cookies = driver.get_cookies()
-json.dump(cookies, open("./cookies1.json", "w"))
+json.dump(cookies, open("./cookies.json", "w"))

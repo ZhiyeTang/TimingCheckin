@@ -82,4 +82,4 @@ if __name__ == "__main__":
         ActionChains(driver).send_keys(Keys.RIGHT).perform()
     
     cookies = driver.get_cookies()
-    json.dump(cookies, open("./cookies1.json", "w"))
+    json.dump(cookies, open("./cookies.json", "w"))
