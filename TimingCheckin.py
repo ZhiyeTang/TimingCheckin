@@ -1,11 +1,14 @@
+import datetime
+import json
+import re
 import time
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-import json
-import re
+
 
 def column_index_to_id(column_index: str):
     S = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -16,7 +19,7 @@ def column_index_to_id(column_index: str):
         id += S.find(letter)
     return id
 
-TARGET = "C255" # the cell box id containing your name
+TARGET = "A1" # the cell box id containing your name
 TARGET_COL, TARGET_ROW = re.findall(r"[A-Za-z]+|\d+", TARGET)
 TARGET_COL = column_index_to_id("C")
 TARGET_ROW = int(TARGET_ROW)
@@ -64,17 +67,19 @@ if __name__ == "__main__":
         print("[INFO] Navigate to Your Cell Success!")
     else:
         print(driver.find_element(By.CLASS_NAME, "bar-label").text)
-        raise ValueError("[ERROR] Something went wrong. Please debug the script \nin a not `headless` environment via commenting the corresponding line.")
+        raise ValueError("[ERROR] Something went wrong. Please debug the script in a not `headless` environment via commenting the corresponding line.")
+    ActionChains(driver).send_keys(Keys.RIGHT).perform()
+    ActionChains(driver).send_keys(Keys.RIGHT).perform()
 
-    ActionChains(driver).send_keys(Keys.RIGHT).perform()
-    ActionChains(driver).send_keys(Keys.RIGHT).perform()
-    ActionChains(driver).send_keys(Keys.RIGHT).perform()
-    ActionChains(driver).send_keys(Keys.RIGHT).perform()
-    ActionChains(driver).send_keys(Keys.RIGHT).perform()
-    for _ in range(60):
+    while True:
         driver.find_element(By.CLASS_NAME, 'formula-input').click()
         editor = driver.find_element(By.ID, 'alloy-simple-text-editor')
-        editor.send_keys("1")
-        print("[INFO] Done")
-        editor.send_keys(Keys.TAB)
-        time.sleep(86400)
+        if "1" not in editor.text:
+            editor.send_keys("1")
+            print(f"[INFO] Done {str(datetime.date.today())}")
+            editor.send_keys(Keys.TAB)
+            break
+        ActionChains(driver).send_keys(Keys.RIGHT).perform()
+    
+    cookies = driver.get_cookies()
+    json.dump(cookies, open("./cookies1.json", "w"))
