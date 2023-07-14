@@ -30,7 +30,7 @@ if __name__ == "__main__":
     options.add_argument("--headless")
 
     driver = webdriver.Chrome(service=service, options=options)
-    driver.get("https://docs.qq.com/sheet/DTHRsZHZicWZvaHlr?tab=BB08J2")
+    driver.get("URL")
     print("[INFO] Loading Tencent Doc Web Page")
     time.sleep(5)
     print("[INFO] Loading Cookies")
