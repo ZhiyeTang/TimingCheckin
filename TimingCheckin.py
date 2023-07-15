@@ -9,6 +9,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+from config import URL, TARGET, CHROME_DRIVER_PATH
 
 def column_index_to_id(column_index: str):
     S = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -19,18 +20,17 @@ def column_index_to_id(column_index: str):
         id += S.find(letter)
     return id
 
-TARGET = "A1" # the cell box id containing your name
 TARGET_COL, TARGET_ROW = re.findall(r"[A-Za-z]+|\d+", TARGET)
 TARGET_COL = column_index_to_id("C")
 TARGET_ROW = int(TARGET_ROW)
 
 if __name__ == "__main__":
-    service = Service(executable_path="/usr/local/bin/googledriver")
+    service = Service(executable_path=CHROME_DRIVER_PATH)
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
 
     driver = webdriver.Chrome(service=service, options=options)
-    driver.get("URL")
+    driver.get(URL)
     print("[INFO] Loading Tencent Doc Web Page")
     time.sleep(5)
     print("[INFO] Loading Cookies")
