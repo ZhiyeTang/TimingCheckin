@@ -30,7 +30,7 @@ TARGET_ROW = int(TARGET_ROW)
 if __name__ == "__main__":
     service = Service(executable_path=CHROME_DRIVER_PATH)
     options = webdriver.ChromeOptions()
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
 
     driver = webdriver.Chrome(service=service, options=options)
     driver.get(URL)
