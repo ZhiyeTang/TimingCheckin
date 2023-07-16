@@ -9,7 +9,10 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-from config import URL, TARGET, CHROME_DRIVER_PATH
+from config import URL, TARGET, CHROME_DRIVER_PATH, COOKIES_PATH
+
+DATE_START = datetime.datetime(2023,7,12).date()
+DATE_TODAY = datetime.date.today()
 
 def column_index_to_id(column_index: str):
     S = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -27,14 +30,14 @@ TARGET_ROW = int(TARGET_ROW)
 if __name__ == "__main__":
     service = Service(executable_path=CHROME_DRIVER_PATH)
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
 
     driver = webdriver.Chrome(service=service, options=options)
     driver.get(URL)
     print("[INFO] Loading Tencent Doc Web Page")
     time.sleep(5)
     print("[INFO] Loading Cookies")
-    cookies = json.load(open("./cookies.json", "r"))
+    cookies = json.load(open(COOKIES_PATH, "r"))
 
     for cookie in cookies:
         driver.add_cookie(cookie)
@@ -71,15 +74,13 @@ if __name__ == "__main__":
     ActionChains(driver).send_keys(Keys.RIGHT).perform()
     ActionChains(driver).send_keys(Keys.RIGHT).perform()
 
-    while True:
-        driver.find_element(By.CLASS_NAME, 'formula-input').click()
-        editor = driver.find_element(By.ID, 'alloy-simple-text-editor')
-        if "1" not in editor.text:
-            editor.send_keys("1")
-            print(f"[INFO] Done {str(datetime.date.today())}")
-            editor.send_keys(Keys.TAB)
-            break
+    for _ in range((DATE_TODAY-DATE_START).days):
         ActionChains(driver).send_keys(Keys.RIGHT).perform()
-    
+    driver.find_element(By.CLASS_NAME, 'formula-input').click()
+    editor = driver.find_element(By.ID, 'alloy-simple-text-editor')
+    editor.send_keys("1")
+    print(f"[INFO] Done {str(DATE_TODAY)}")
+    editor.send_keys(Keys.TAB)
+
     cookies = driver.get_cookies()
-    json.dump(cookies, open("./cookies.json", "w"))
+    json.dump(cookies, open(COOKIES_PATH, "w"))

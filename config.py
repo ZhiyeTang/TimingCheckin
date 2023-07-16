@@ -4,3 +4,5 @@ URL = "https://docs.qq.com/sheet/DTHRsZHZicWZvaHlr?tab=BB08J2"
 TARGET = "C4"
 # 你的Chrome Driver所处路径
 CHROME_DRIVER_PATH = "/usr/local/bin/googledriver"
+# 你的cookies.json所处路径
+COOKIES_PATH = "./cookies.json"
